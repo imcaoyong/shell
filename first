@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+echo -e "\033[41;33m
+################################################
+#      1:search a record                       #
+#      2:add a record                          #
+#      3:delete a record                       #
+#      4:display all record                    #
+#      5:edit record with vi                   #
+#      H:help screen                           #
+#      Q:exit pragma                           #
+################################################\033[0m"
+echo -e "\033[40;32m"
+read -p "please enter your choice[1 2 3 4 5 H Q]:" num
+echo -e "\033[0m"
+if [ "$num" = 1 ];then
+  read -p "please enter name >>>" name
+      if [ -z $name ];then
+         echo "you didn't enter a name"
+         exit
+      else
+         if [ ! -f record ];then
+ echo "you must have some scores before you can search!"
+         else
+           grep "$name" record &>/dev/null
+           if [ $? -ne 0 ];then
+             echo "name not in record" 
+             sleep 1
+             exit
+           else
+             grep "$name" record | awk -F. '{print $2,$3}'
+             sleep 3 && exit
+           fi
+         fi
+       fi
+elif [ "$num" = "2" ];then
+ echo -e "\033[40;32m" 
+ read -p "enter name and score of a recoed:" abc
+ while [ -z $abc ]
+    do
+   echo "you didn't enter any value"
+   read -p "please enter name and score:" abc
+    done
+  echo $abc >> record
+  echo "added $abc in record"
+  echo -e "\033[0m"
+  sleep 3
+  exit
+#elif [ $num = 3 ];then
+ # sed -i '$d' record
+elif [ $num = 4 ];then
+ cat record
+ sleep 3
+ exit
+elif [ $num = 5 ];then
+ vim record
+elif [ "$num" = "H" ];then
+  echo -e "\033[40;36m This is a student's record manager program\033[0m"
+  sleep 3
+  exit
+elif [ "$num" = "Q" ];then
+  exit
+else
+ echo "please enter valid mode"
+fi
